@@ -19,7 +19,7 @@ class GitHub {
       const [userResponse, reposResponse] = await Promise.all([
         fetch(`https://api.github.com/users/${username}`),
         fetch(
-          `https://api.github.com/users/${username}/repos?sort=created&per_page=5`
+          `https://api.github.com/users/${username}/repos?sort=created&per_page=5`,
         ),
       ]);
 
@@ -34,22 +34,28 @@ class GitHub {
 
   createUserCard(user, repos) {
     const card = `
-        <div class="card">
-          <img src="${user.avatar_url}" alt="${user.name}" class="avatar">
-          <h2 class="name">${user.name}</h2>
-          <p class="bio">${user.bio}</p>
-          <div class="stats">
-            <p>${user.followers} Followers</p>
-            <p>${user.following} Following</p>
-            <p>${user.public_repos} Repos</p>
-          </div>
-          <div class="repo-list">
-            ${repos
-              .map((repo) => `<div class="repo">${repo.name}</div>`)
-              .join("")}
-          </div>
+      <div class="card">
+        <img src="${user.avatar_url}" alt="${user.name}" class="avatar">
+        <h2 class="name">${user.name}</h2>
+        <p class="bio">${user.bio}</p>
+        <div class="stats">
+          <p>${user.followers} Followers</p>
+          <p>${user.following} Following</p>
+          <p>${user.public_repos} Repos</p>
         </div>
-      `;
+        <div class="repo-list">
+          ${repos
+            .map(
+              (repo) => `
+            <a href="${repo.html_url}" target="_blank" class="repo">
+              ${repo.name}
+            </a>
+          `,
+            )
+            .join("")}
+        </div>
+      </div>
+    `;
 
     this.main.innerHTML = card;
   }
